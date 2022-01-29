@@ -1098,7 +1098,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!surfing && !bike)
         {
-                Dialog.undrawDialogBox();
                 bike = true;
                 print("Switching Bike State");
                 if (bike)
@@ -1112,7 +1111,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Dialog.drawDialogBox();
             yield return Dialog.StartCoroutine("drawText", "Cannot bike here!");
-            Dialog.undrawDialogBox();
+            yield return new WaitForSeconds(0.5f);
+            //Dialog.undrawDialogBox();
         }
         else if (bike)
         {
@@ -1121,6 +1121,7 @@ public class PlayerMovement : MonoBehaviour
             speed = walkSpeed * 3;
             followerScript.canMove = true;
         }
+        Dialog.undrawDialogBox();
         unpauseInput();
         yield return new WaitForSeconds(0.2f);
     }

@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public bool surfing = false;
     public bool bike = false;
     public bool strength = false;
+    public bool hasBike;
     public float walkSpeed = 0.3f; //time in seconds taken to walk 1 square.
     public float runSpeed = 0.15f;
     public float surfSpeed = 0.2f;
@@ -37,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     private Transform pawnReflection;
     //private Material pawnReflectionSprite;
     private SpriteRenderer pawnSprite;
+    private SpriteRenderer pawnBikeSprite;
     private SpriteRenderer pawnReflectionSprite;
 
     public Transform hitBox;
@@ -104,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
         pawn = transform.Find("Pawn");
         pawnReflection = transform.Find("PawnReflection");
         pawnSprite = pawn.GetComponent<SpriteRenderer>();
+        pawnBikeSprite = pawn.GetComponent<SpriteRenderer>();
         pawnReflectionSprite = pawnReflection.GetComponent<SpriteRenderer>();
 
         //pawnReflectionSprite = transform.FindChild("PawnReflection").GetComponent<MeshRenderer>().material;
@@ -275,9 +278,26 @@ public class PlayerMovement : MonoBehaviour
                 mostRecentDirectionPressed = 2;
             }
         }
-    }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            print("Starting bike check");
+            pauseInput();
+            StartCoroutine("bikeCheck");
+        }
+            /*            print("Switching Bike State");
+                        if(bike) {
+                            BgmHandler.main.PlayMain(GlobalVariables.global.bikeBGM, GlobalVariables.global.bikeBgmLoopStart);
+                            speed = walkSpeed/3;
+                        }
+                        else
+                        {
+                            BgmHandler.main.PlayMain(accessedAudio, accessedAudioLoopStartSamples);
+                            speed = walkSpeed * 3;
+                        }*//*
+                    }*/
+        }
 
-    private bool isDirectionKeyHeld(int directionCheck)
+        private bool isDirectionKeyHeld(int directionCheck)
     {
         bool directionHeld = false;
         if (directionCheck == 0 && Input.GetAxisRaw("Vertical") > 0)
@@ -322,13 +342,16 @@ public class PlayerMovement : MonoBehaviour
                             updateAnimation("walk", walkFPS);
                         }
                         speed = runSpeed;
-                    }
+                    } 
                     else
                     {
                         running = false;
                         updateAnimation("walk", walkFPS);
                         speed = walkSpeed;
                     }
+                } else if (bike && !surfing)
+                {
+                    updateAnimation("bike",runFPS);
                 }
                 if (Input.GetButton("Start"))
                 {
@@ -1011,7 +1034,7 @@ public class PlayerMovement : MonoBehaviour
                 SendMessageOptions.DontRequireReceiver);
             currentInteraction = null;
         }
-        else if (!surfing)
+        else if (!surfing && !bike)
         {
             if (currentMap.getTileTag(transform.position + spaceInFront) == 2)
             {
@@ -1069,6 +1092,37 @@ public class PlayerMovement : MonoBehaviour
         followerScript.canMove = true;
         mount.transform.localPosition = mountPosition;
         updateMount(false);
+    }
+
+    private IEnumerator bikeCheck() 
+    {
+        if (!surfing && !bike)
+        {
+                Dialog.undrawDialogBox();
+                bike = true;
+                print("Switching Bike State");
+                if (bike)
+                {
+                    BgmHandler.main.PlayMain(GlobalVariables.global.bikeBGM, GlobalVariables.global.bikeBgmLoopStart);
+                    speed = walkSpeed / 3;
+                    followerScript.StartCoroutine("withdrawToBall");
+                }
+        } 
+        else if (surfing)
+        {
+            Dialog.drawDialogBox();
+            yield return Dialog.StartCoroutine("drawText", "Cannot bike here!");
+            Dialog.undrawDialogBox();
+        }
+        else if (bike)
+        {
+            bike = false;
+            BgmHandler.main.PlayMain(accessedAudio, accessedAudioLoopStartSamples);
+            speed = walkSpeed * 3;
+            followerScript.canMove = true;
+        }
+        unpauseInput();
+        yield return new WaitForSeconds(0.2f);
     }
 
     private IEnumerator surfCheck()

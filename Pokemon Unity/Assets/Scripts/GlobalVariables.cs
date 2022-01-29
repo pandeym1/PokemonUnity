@@ -27,6 +27,9 @@ public class GlobalVariables : MonoBehaviour
     public AudioClip surfBGM;
     public int surfBgmLoopStart;
 
+    public AudioClip bikeBGM;
+    public int bikeBgmLoopStart;
+
     public RenderTexture GUIDisplay;
 
 
@@ -324,5 +327,10 @@ public class GlobalVariables : MonoBehaviour
     public AudioClip getSurfBGM()
     {
         return surfBGM;
+    }
+
+    public AudioClip getBikeBGM() 
+    {
+        return bikeBGM;
     }
 }

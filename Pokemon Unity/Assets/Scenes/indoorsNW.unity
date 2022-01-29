@@ -4685,6 +4685,10 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 11403742, guid: b29bc2dec560e9a408a7645a4e4855ed, type: 3}
+      propertyPath: bikeBGM
+      value: 
+      objectReference: {fileID: 8300000, guid: 47f316d3140b88a4d919e1939d63e01e, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b29bc2dec560e9a408a7645a4e4855ed, type: 3}
 --- !u!1 &1007265387

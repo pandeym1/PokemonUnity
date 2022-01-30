@@ -278,7 +278,7 @@ public class PlayerMovement : MonoBehaviour
                 mostRecentDirectionPressed = 2;
             }
         }
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B)) //Manas was here
         {
             print("Starting bike check");
             pauseInput();
@@ -351,7 +351,7 @@ public class PlayerMovement : MonoBehaviour
                     }
                 } else if (bike && !surfing)
                 {
-                    updateAnimation("bike",runFPS);
+                    updateAnimation("bike",runFPS); //Manas was here
                 }
                 if (Input.GetButton("Start"))
                 {
@@ -1094,7 +1094,7 @@ public class PlayerMovement : MonoBehaviour
         updateMount(false);
     }
 
-    private IEnumerator bikeCheck() 
+    private IEnumerator bikeCheck() //Manas was here
     {
         if (!surfing && !bike)
         {
